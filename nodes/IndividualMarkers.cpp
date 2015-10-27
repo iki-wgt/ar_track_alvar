@@ -384,7 +384,7 @@ void getPointCloudCallback (const sensor_msgs::PointCloud2ConstPtr &msg)
 	  std::string id_string = out.str();
 	  markerFrame += id_string;
 	  tf::StampedTransform camToMarker (t, image_msg->header.stamp, image_msg->header.frame_id, markerFrame.c_str());
-	  tf_broadcaster->sendTransform(camToMarker);
+	  //tf_broadcaster->sendTransform(camToMarker);
 				
 	  //Create the rviz visualization messages
 	  tf::poseTFToMsg (markerPose, rvizMarker_.pose);
