@@ -73,7 +73,7 @@ tf::TransformListener *tf_listener;
 tf::TransformBroadcaster *tf_broadcaster;
 MarkerDetector<MarkerData> marker_detector;
 
-bool enableSwitched = false;
+bool enableSwitched = true;
 bool enabled = true;
 double max_frequency;
 double marker_size;
@@ -500,6 +500,9 @@ int main(int argc, char *argv[])
   if (argc > 7)
     max_frequency = atof(argv[7]);
 
+  if (argc > 8)
+    enabled = argv[8];
+
   // Set dynamically configurable parameters so they don't get replaced by default values
   pn.setParam("marker_size", marker_size);
   pn.setParam("max_new_marker_error", max_new_marker_error);
@@ -507,6 +510,10 @@ int main(int argc, char *argv[])
 
   if (argc > 7)
     pn.setParam("max_frequency", max_frequency);
+
+  if (argc > 8)
+    pn.setParam("enabled", enabled);
+
 
   cam = new Camera(n, cam_info_topic);
   tf_listener = new tf::TransformListener(n);
