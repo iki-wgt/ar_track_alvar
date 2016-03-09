@@ -75,6 +75,7 @@ MarkerDetector<MarkerData> marker_detector;
 
 bool enableSwitched = true;
 bool enabled = true;
+bool publish_tfs = false;
 double max_frequency;
 double marker_size;
 double max_new_marker_error;
@@ -384,7 +385,10 @@ void getPointCloudCallback (const sensor_msgs::PointCloud2ConstPtr &msg)
 	  std::string id_string = out.str();
 	  markerFrame += id_string;
 	  tf::StampedTransform camToMarker (t, image_msg->header.stamp, image_msg->header.frame_id, markerFrame.c_str());
-	  tf_broadcaster->sendTransform(camToMarker);
+	  
+    if(publish_tfs){
+      tf_broadcaster->sendTransform(camToMarker);
+    }
 				
 	  //Create the rviz visualization messages
 	  tf::poseTFToMsg (markerPose, rvizMarker_.pose);
@@ -468,6 +472,7 @@ void configCallback(ar_track_alvar::ParamsConfig &config, uint32_t level)
   enableSwitched = enabled != config.enabled;
 
   enabled = config.enabled;
+  publish_tfs = config.publish_tfs;
   max_frequency = config.max_frequency;
   marker_size = config.marker_size;
   max_new_marker_error = config.max_new_marker_error;
@@ -513,6 +518,9 @@ int main(int argc, char *argv[])
 
   if (argc > 8)
     pn.setParam("enabled", enabled);
+
+  if (argc > 9)
+    pn.setParam("publish_tfs", publish_tfs);
 
 
   cam = new Camera(n, cam_info_topic);
